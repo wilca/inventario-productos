@@ -17,16 +17,10 @@ const FilterBar = ({ onFilter, Loading }) => {
     const [dateStart, setDateStart] = useState('');
     const [dateEnd, setDateEnd] = useState('');
 
-    /**
-     * Maneja el envío de la búsqueda
-     */
     const handleSearch = () => {
         onFilter({ title, dateStart, dateEnd });
     };
 
-    /**
-     * Limpia todas las entradas de filtro y reinicia la lista
-     */
     const handleClear = () => {
         setTitle('');
         setDateStart('');

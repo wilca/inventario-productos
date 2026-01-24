@@ -16,10 +16,8 @@ const apiClient = axios.create({
  * @returns {Promise<Object>} - Lista de productos
  */
 export const getProducts = async (offset = 0, limit = 10) => {
-    console.log("API_URL", API_URL);
-
     try {
-        const response = await apiClient.get('', {
+        const response = await apiClient.get('/products', {
             params: { offset, limit },
         });
         return response.data;
@@ -36,7 +34,7 @@ export const getProducts = async (offset = 0, limit = 10) => {
  */
 export const createProduct = async (productData) => {
     try {
-        const response = await apiClient.post('', productData);
+        const response = await apiClient.post('/products', productData);
         return response.data;
     } catch (error) {
         console.error('Error al crear producto:', error);
@@ -52,7 +50,7 @@ export const createProduct = async (productData) => {
  */
 export const updateProduct = async (id, productData) => {
     try {
-        const response = await apiClient.put(`/${id}`, productData);
+        const response = await apiClient.put(`/products/${id}`, productData);
         return response.data;
     } catch (error) {
         console.error(`Error al actualizar producto ${id}:`, error);
@@ -67,7 +65,7 @@ export const updateProduct = async (id, productData) => {
  */
 export const deleteProduct = async (id) => {
     try {
-        await apiClient.delete(`/${id}`);
+        await apiClient.delete(`/products/${id}`);
         return true;
     } catch (error) {
         console.error(`Error al eliminar producto ${id}:`, error);
@@ -85,7 +83,7 @@ export const deleteProduct = async (id) => {
  */
 export const filterProductsByTitle = async (title) => {
     try {
-        const response = await apiClient.get('', {
+        const response = await apiClient.get('/products', {
             params: { title }
         });
         return response.data;
@@ -94,3 +92,17 @@ export const filterProductsByTitle = async (title) => {
         throw error;
     }
 }
+
+/**
+ * Obtener categorías
+ * @returns {Promise<Object>} - Lista de categorías
+ */
+export const getCategories = async () => {
+    try {
+        const response = await apiClient.get('/categories');
+        return response.data;
+    } catch (error) {
+        console.error(`Error al obtener categorías:`, error);
+        throw error;
+    }
+};

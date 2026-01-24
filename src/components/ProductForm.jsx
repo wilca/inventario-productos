@@ -4,32 +4,53 @@ import {
     TextField, Button, Grid, MenuItem, Box
 } from '@mui/material';
 import Swal from 'sweetalert2';
+import { getCategories } from '../services/productService';
 
 /**
  * ProductForm Component
- * A dialog form for creating or updating a product.
+ * Dialogo para crear o actualizar un producto.
  *
  * @component
  * @param {Object} props
- * @param {boolean} props.open - Controls dialog visibility
- * @param {Function} props.onClose - Callback to close dialog
- * @param {Function} props.onSubmit - Callback when form is valid and submitted
- * @param {Object} [props.initialData] - Data to pre-fill form for editing
+ * @param {boolean} props.open - Controla la visibilidad del dialogo
+ * @param {Function} props.onClose - Callback para cerrar el dialogo
+ * @param {Function} props.onSubmit - Callback cuando el formulario es válido y se envía
+ * @param {Object} [props.initialData] - Datos para prellenar el formulario al editar
  */
 const ProductForm = ({ open, onClose, onSubmit, initialData }) => {
     const [formData, setFormData] = useState({
         title: '',
         price: '',
         description: '',
-        categoryId: 1,
+        categoryId: 0,
         images: ['']
     });
 
     const [imageUrl, setImageUrl] = useState('');
     const [errors, setErrors] = useState({});
     const imageDefault = 'https://i.imgur.com/1sk8cj2.png';
+    const [categories, setCategories] = useState([]);
 
     const isEditMode = !!initialData;
+
+    const loadAllCategories = async () => {
+        try {
+            const data = await getCategories();
+            data.unshift({ id: 0, name: 'Seleccione una categoría', slug: 'Seleccione una categoría', image: 'Seleccione una categoría', creationAt: '2026-01-01' });
+            setCategories(data);
+        } catch (error) {
+            console.log('error', error);
+            Swal.fire({
+                toast: true,
+                position: 'bottom-end',
+                icon: 'error',
+                title: 'Error al cargar categorías',
+                showConfirmButton: false,
+                timer: 3000,
+                background: '#fdezea'
+            });
+        }
+    };
 
     useEffect(() => {
         if (initialData) {
@@ -37,7 +58,7 @@ const ProductForm = ({ open, onClose, onSubmit, initialData }) => {
                 title: initialData.title || '',
                 price: initialData.price || '',
                 description: initialData.description || '',
-                categoryId: initialData.category?.id || 1,
+                categoryId: initialData.category?.id || 0,
                 images: initialData.images || []
             });
             if (initialData.images && initialData.images.length > 0) {
@@ -46,11 +67,12 @@ const ProductForm = ({ open, onClose, onSubmit, initialData }) => {
                 setImageUrl('');
             }
         } else {
+            loadAllCategories();
             setFormData({
                 title: '',
                 price: '',
                 description: '',
-                categoryId: 1,
+                categoryId: 0,
                 images: ['']
             });
             setImageUrl('');
@@ -62,6 +84,7 @@ const ProductForm = ({ open, onClose, onSubmit, initialData }) => {
         if (!formData.title) tempErrors.title = 'El título es requerido';
         if (!formData.price || formData.price <= 0) tempErrors.price = 'El precio debe ser mayor a 0';
         if (!formData.description) tempErrors.description = 'La descripción es requerida';
+        if (formData.categoryId === 0) tempErrors.categoryId = 'La categoría es requerida';
         if (formData.images.length === 0 || !formData.images[0]) {
             setImageUrl(imageDefault);
             setFormData(prev => ({
@@ -138,17 +161,20 @@ const ProductForm = ({ open, onClose, onSubmit, initialData }) => {
                         <TextField
                             select
                             label="Categoría"
+                            id="categoryId"
                             name="categoryId"
                             fullWidth
                             value={formData.categoryId}
                             onChange={handleChange}
                             disabled={isEditMode}
+                            error={!!errors.categoryId}
+                            helperText={errors.categoryId}
                         >
-                            <MenuItem value={1}>Clothes</MenuItem>
-                            <MenuItem value={2}>Electronics</MenuItem>
-                            <MenuItem value={3}>Furniture</MenuItem>
-                            <MenuItem value={4}>Shoes</MenuItem>
-                            <MenuItem value={5}>Others</MenuItem>
+                            {categories.length > 0 && categories.map(category => (
+                                <MenuItem key={category.id} value={category.id}>
+                                    {category.name}
+                                </MenuItem>
+                            ))}
                         </TextField>
                     </Grid>
                     <Grid size={2}>

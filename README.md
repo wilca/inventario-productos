@@ -12,7 +12,6 @@ Esta es una Aplicación (SPA) desarrollada con React y Vite para la gestión de 
 ## API
 El proyecto consume la **Platzi Fake Store API**:
 - **Documentación**: [https://fakeapi.platzi.com/](https://fakeapi.platzi.com/)
-- **URL**: `https://api.escuelajs.co/api/v1/products`
 
 ## Estructura del Proyecto
 La estructura de directorios del código es la siguiente:
@@ -20,18 +19,10 @@ La estructura de directorios del código es la siguiente:
 ```
 src/
 ├── components/       # Componentes
-│   ├── FilterBar.jsx    # Barra de búsqueda y filtros de fecha
-│   ├── Layout.jsx       # Estructura principal (Navbar + Contenido + Footer)
-│   ├── Navbar.jsx       # Barra de navegación superior
-│   ├── ProductForm.jsx  # Formulario modal para Crear/Editar productos
-│   └── ProductTable.jsx # Tabla de listado de productos
-├── services/         # Lógica de comunicación con la API
-│   └── productService.js # Funciones axios para GET, POST, PUT, DELETE
-├── views/            # Vistas principales de la aplicación
-│   ├── Home.jsx         # Página de inicio / Bienvenida
-│   └── Inventory.jsx    # Vista principal de gestión de inventario
-├── App.jsx           # Componente raíz y configuración de rutas
-├── main.jsx          # Punto de entrada de la aplicación React
+├── services/         # Lógica de comunicación 
+├── views/            # Vistas principales
+├── App.jsx           # Componente raíz y rutas
+├── main.jsx          # Punto de entrada 
 └── index.css         # Estilos globales y resets
 ```
 
@@ -51,7 +42,7 @@ Sigue estos pasos para ejecutar la aplicación en tu entorno local:
 3.  **Configurar Variables de Entorno**:
     El proyecto ya incluye un archivo `.env` con la URL de la API:
     ```
-    VITE_API_FAKE_STORE_URL=https://api.escuelajs.co/api/v1/products
+    VITE_API_FAKE_STORE_URL=https://api.escuelajs.co/api/v1
     ```
 
 4.  **Ejecutar en Desarrollo**:

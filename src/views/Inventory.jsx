@@ -91,8 +91,11 @@ const Inventory = () => {
         }
 
         if (filters.dateStart && filters.dateEnd) {
+            console.log('filtro fecha:', filters.dateStart, filters.dateEnd);
+
             const start = startOfDay(parseISO(filters.dateStart));
             const end = endOfDay(parseISO(filters.dateEnd));
+            console.log('producto', results.length);
 
             results = results.filter(p => {
                 const dateStr = p.creationAt || p.createdAt;
